@@ -3,11 +3,13 @@
 import datetime
 import math
 import sys
-import mycalc
+import mycalc as hoho
+from mycalc import add
 #import enum
 import sets
 
-print mycalc.add(1,2)
+print "hoho.add=", hoho.add(1,2)
+print "add=", add(1,2)
 
 def squre (n):
     return n*n
