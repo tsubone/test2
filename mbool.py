@@ -10,14 +10,24 @@ def IsMbool(a):
     else:
         return Mbool.F
 
-MandTbl=((Mbool.T, Mbool.I, Mbool.F, Mbool.M),
-         (Mbool.I, Mbool.I, Mbool.F, Mbool.M),
-         (Mbool.F, Mbool.F, Mbool.F, Mbool.M),
+#MandTbl=((Mbool.T, Mbool.I, Mbool.F, Mbool.M),
+#         (Mbool.I, Mbool.I, Mbool.F, Mbool.M),
+#         (Mbool.F, Mbool.F, Mbool.F, Mbool.M),
+#         (Mbool.M, Mbool.M, Mbool.M, Mbool.M))
+
+#MorTbl=((Mbool.T, Mbool.T, Mbool.T, Mbool.T),
+#        (Mbool.T, Mbool.I, Mbool.I, Mbool.I),
+#        (Mbool.T, Mbool.I, Mbool.F, Mbool.F),
+#        (Mbool.T, Mbool.I, Mbool.F, Mbool.M))
+
+MandTbl=((Mbool.T, Mbool.T, Mbool.M, Mbool.M),
+         (Mbool.T, Mbool.I, Mbool.F, Mbool.M),
+         (Mbool.M, Mbool.F, Mbool.F, Mbool.M),
          (Mbool.M, Mbool.M, Mbool.M, Mbool.M))
 
-MorTbl=((Mbool.T, Mbool.T, Mbool.T, Mbool.T),
-        (Mbool.T, Mbool.I, Mbool.I, Mbool.I),
-        (Mbool.T, Mbool.I, Mbool.F, Mbool.F),
+MorTbl=((Mbool.T, Mbool.I, Mbool.I, Mbool.T),
+        (Mbool.I, Mbool.I, Mbool.I, Mbool.I),
+        (Mbool.I, Mbool.I, Mbool.F, Mbool.F),
         (Mbool.T, Mbool.I, Mbool.F, Mbool.M))
 
 MnotTbl=(Mbool.F, Mbool.M, Mbool.T, Mbool.I)
@@ -75,12 +85,20 @@ print Mand (1, 2)
 print Mand (Mbool.T, Mbool.F)
 print a.value
 
-print "=====result======="
+print "=====result 1(De Morgan)======="
 
 for i in Mbool:
     for j in Mbool:
         a = Mnot(Mor(i, j))
         b = Mand(Mnot(i), Mnot(j))
-        print i, j, a == b
+        print i, j, a, b, a == b
+
+print "=====result 2(De Morgan)======="
+
+for i in Mbool:
+    for j in Mbool:
+        a = Mnot(Mand(i, j))
+        b = Mor(Mnot(i), Mnot(j))
+        print i, j, a, b, a == b
 
 
