@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -31,4 +32,9 @@ print m3, m1*m3
 
 x=np.arange(-3,3,0.1)
 y=np.sin(x)
-plt.plot
+#plt.plot(x,y)
+plt.plot([1,2])
+
+print "finish.."
+
+time.sleep(5)
