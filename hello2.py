@@ -34,6 +34,7 @@ x=np.arange(-3,3,0.1)
 y=np.sin(x)
 #plt.plot(x,y)
 plt.plot([1,2])
+plt.show()
 
 print "finish.."
 
