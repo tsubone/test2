@@ -2,6 +2,8 @@
 
 import enum
 
+__my_mode__=1
+
 Mbool = enum.Enum("Mbool", "T I F M")
 
 def IsMbool(a):
@@ -10,27 +12,32 @@ def IsMbool(a):
     else:
         return Mbool.F
 
-MandTbl=((Mbool.T, Mbool.I, Mbool.F, Mbool.M),
-         (Mbool.I, Mbool.I, Mbool.F, Mbool.M),
-         (Mbool.F, Mbool.F, Mbool.F, Mbool.M),
-         (Mbool.M, Mbool.M, Mbool.M, Mbool.M))
-
-MorTbl=((Mbool.T, Mbool.T, Mbool.T, Mbool.M),
-        (Mbool.T, Mbool.I, Mbool.I, Mbool.M),
-        (Mbool.T, Mbool.I, Mbool.F, Mbool.M),
-        (Mbool.M, Mbool.M, Mbool.M, Mbool.M))
-
-#MandTbl=((Mbool.T, Mbool.T, Mbool.M, Mbool.M),
-#         (Mbool.T, Mbool.I, Mbool.F, Mbool.M),
-#         (Mbool.M, Mbool.F, Mbool.F, Mbool.M),
-#         (Mbool.M, Mbool.M, Mbool.M, Mbool.M))
-
-#MorTbl=((Mbool.T, Mbool.I, Mbool.I, Mbool.T),
-#        (Mbool.I, Mbool.I, Mbool.I, Mbool.I),
-#        (Mbool.I, Mbool.I, Mbool.F, Mbool.F),
-#        (Mbool.T, Mbool.I, Mbool.F, Mbool.M))
-
-MnotTbl=(Mbool.F, Mbool.I, Mbool.T, Mbool.M)
+if __my_mode__ == 1:
+    print "use mode 1"
+    MandTbl=((Mbool.T, Mbool.I, Mbool.F, Mbool.M),
+             (Mbool.I, Mbool.I, Mbool.F, Mbool.M),
+             (Mbool.F, Mbool.F, Mbool.F, Mbool.M),
+             (Mbool.M, Mbool.M, Mbool.M, Mbool.M))
+    
+    MorTbl=((Mbool.T, Mbool.T, Mbool.T, Mbool.M),
+            (Mbool.T, Mbool.I, Mbool.I, Mbool.M),
+            (Mbool.T, Mbool.I, Mbool.F, Mbool.M),
+            (Mbool.M, Mbool.M, Mbool.M, Mbool.M))
+    
+    MnotTbl=(Mbool.F, Mbool.I, Mbool.T, Mbool.M)
+else:
+    print "use mode 0"
+    MandTbl=((Mbool.T, Mbool.T, Mbool.M, Mbool.M),
+             (Mbool.T, Mbool.I, Mbool.F, Mbool.M),
+             (Mbool.M, Mbool.F, Mbool.F, Mbool.M),
+             (Mbool.M, Mbool.M, Mbool.M, Mbool.M))
+    
+    MorTbl=((Mbool.T, Mbool.I, Mbool.I, Mbool.T),
+            (Mbool.I, Mbool.I, Mbool.I, Mbool.I),
+            (Mbool.I, Mbool.I, Mbool.F, Mbool.F),
+            (Mbool.T, Mbool.I, Mbool.F, Mbool.M))
+    
+    MnotTbl=(Mbool.F, Mbool.M, Mbool.T, Mbool.I)
 
 def Mand(a,b):
     if IsMbool (a) != Mbool.T:
@@ -54,20 +61,21 @@ def Mnot(a):
 
     return MnotTbl[a.value-1];
 
-print "=====result 1(De Morgan/My rule2)======="
-
+print "===== De Morgan !(A || B) == !A && !B ======="
 for i in Mbool:
     for j in Mbool:
         a = Mnot(Mor(i, j))
         b = Mand(Mnot(i), Mnot(j))
         print i, j, a, b, a == b
 
-print "=====result 2(De Morgan/My rule2)======="
-
+print "===== De Morgan !(A && B) == (!A || !B) ======="
 for i in Mbool:
     for j in Mbool:
         a = Mnot(Mand(i, j))
         b = Mor(Mnot(i), Mnot(j))
         print i, j, a, b, a == b
 
-
+print "===== Law of noncontradiction !(A && !A) ======"
+for i in Mbool:
+    b = Mnot(Mand(i, Mnot(i)))
+    print i, b, b == Mbool.T
