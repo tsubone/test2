@@ -12,6 +12,18 @@ def IsMbool(a):
     else:
         return Mbool.F
 
+def IsMeq(a, b):
+    if IsMbool (a) != Mbool.T:
+        return Mbool.M
+    elif IsMbool (b) != Mbool.T:
+        return Mbool.M
+    
+    if a == b:
+        return Mbool.T
+    else:
+        return Mbool.F
+
+
 if __my_mode__ == 1:
     print "use mode 1"
     MandTbl=((Mbool.T, Mbool.I, Mbool.F, Mbool.M),
@@ -66,16 +78,16 @@ for i in Mbool:
     for j in Mbool:
         a = Mnot(Mor(i, j))
         b = Mand(Mnot(i), Mnot(j))
-        print i, j, a, b, a == b
+        print i, j, " ---> ", IsMeq(a,b)
 
 print "===== De Morgan !(A && B) == (!A || !B) ======="
 for i in Mbool:
     for j in Mbool:
         a = Mnot(Mand(i, j))
         b = Mor(Mnot(i), Mnot(j))
-        print i, j, a, b, a == b
+        print i, j, " ---> ", IsMeq(a,b)
 
 print "===== Law of noncontradiction !(A && !A) ======"
 for i in Mbool:
     b = Mnot(Mand(i, Mnot(i)))
-    print i, b, b == Mbool.T
+    print i, " ---> ",  b
