@@ -48,7 +48,6 @@ def Mor(a,b):
 
     return MorTbl[a.value-1][b.value-1]
 
-
 def Mnot(a):
     if IsMbool (a) != Mbool.T:
         return Mbool.M
@@ -56,34 +55,32 @@ def Mnot(a):
     return MnotTbl[a.value-1];
 
 
-print Mbool(1)
-print Mbool(2)
-print Mbool(3)
-print Mbool(4)
-print Mbool.T.value
-print Mbool.T.name
-a = Mbool.T
-print a
-if a == Mbool.T:
-    print "hoge"
-else:
-    print "koko"
+# print Mbool(1)
+# print Mbool(2)
+# print Mbool(3)
+# print Mbool(4)
+# print Mbool.T.value
+# print Mbool.T.name
+# a = Mbool.T
+# print a
+# if a == Mbool.T:
+#     print "hoge"
+# else:
+#     print "koko"
 
-kkk = "hoo:" + IsMbool(Mbool.M).name
-print kkk
+#kkk = "hoo:" + IsMbool(Mbool.M).name
+#print kkk
 
-print "kkk=%s,%i" % (kkk, 1)
+#print "kkk=%s,%i" % (kkk, 1)
 
-for i in Mbool:
-    print i
+#for i in Mbool:
+#    print i
 
-print MandTbl
+#print MandTbl
 
-print "Hello"
-
-print Mand (1, 2)
-print Mand (Mbool.T, Mbool.F)
-print a.value
+#print Mand (1, 2)
+#print Mand (Mbool.T, Mbool.F)
+#print a.value
 
 print "=====result 1(De Morgan)======="
 
