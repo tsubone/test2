@@ -2,10 +2,10 @@
 
 import enum
 
-Mbool = enum.Enum("Mbool", "T I F M")
+Mbool = enum.Enum("Mbool", "T I F")
 
 def IsMbool(a):
-    if a == Mbool.T or a == Mbool.F or a == Mbool.I or a == Mbool.M:
+    if a == Mbool.T or a == Mbool.F or a == Mbool.I:
         return Mbool.T
     else:
         return Mbool.F
@@ -20,17 +20,15 @@ def IsMbool(a):
 #        (Mbool.T, Mbool.I, Mbool.F, Mbool.F),
 #        (Mbool.T, Mbool.I, Mbool.F, Mbool.M))
 
-MandTbl=((Mbool.T, Mbool.T, Mbool.M, Mbool.M),
-         (Mbool.T, Mbool.I, Mbool.F, Mbool.M),
-         (Mbool.M, Mbool.F, Mbool.F, Mbool.M),
-         (Mbool.M, Mbool.M, Mbool.M, Mbool.M))
+MandTbl=((Mbool.T, Mbool.I, Mbool.F),
+         (Mbool.I, Mbool.I, Mbool.F),
+         (Mbool.F, Mbool.F, Mbool.F))
 
-MorTbl=((Mbool.T, Mbool.I, Mbool.I, Mbool.T),
-        (Mbool.I, Mbool.I, Mbool.I, Mbool.I),
-        (Mbool.I, Mbool.I, Mbool.F, Mbool.F),
-        (Mbool.T, Mbool.I, Mbool.F, Mbool.M))
+MorTbl=((Mbool.T, Mbool.T, Mbool.T),
+        (Mbool.T, Mbool.I, Mbool.I),
+        (Mbool.T, Mbool.I, Mbool.F))
 
-MnotTbl=(Mbool.F, Mbool.M, Mbool.T, Mbool.I)
+MnotTbl=(Mbool.F, Mbool.I, Mbool.T)
 
 def Mand(a,b):
     if IsMbool (a) != Mbool.T:
@@ -82,7 +80,7 @@ def Mnot(a):
 #print Mand (Mbool.T, Mbool.F)
 #print a.value
 
-print "=====result 1(De Morgan/My rule)======="
+print "=====result 1(De Morgan/Kleene)======="
 
 for i in Mbool:
     for j in Mbool:
@@ -90,7 +88,7 @@ for i in Mbool:
         b = Mand(Mnot(i), Mnot(j))
         print i, j, a, b, a == b
 
-print "=====result 2(De Morgan/My rule)======="
+print "=====result 2(De Morgan/Kleene)======="
 
 for i in Mbool:
     for j in Mbool:
