@@ -2,7 +2,7 @@
 
 import enum
 
-__my_mode__=0
+__my_mode__=1
 
 
 def IsMbool(a):
@@ -50,7 +50,7 @@ if __my_mode__ == 1:
 
 #OK1
     MImplTbl=((Mbool.T, Mbool.I, Mbool.F, Mbool.M),
-              (Mbool.T, Mbool.T, Mbool.F, Mbool.M),
+              (Mbool.T, Mbool.T, Mbool.T, Mbool.M),
               (Mbool.T, Mbool.T, Mbool.T, Mbool.M),
               (Mbool.T, Mbool.T, Mbool.T, Mbool.T))
 
@@ -157,20 +157,46 @@ def Meq(a, b):
     else:
         return Mbool.F
 
+# ===== zennken koutei ((A -> B) && A) -> B =======
+def Zennkenn(p, q):
+    return Mimpl(Mand(Mimpl(p, q), p), q)
+
+# ===== Distribution law (A && (B || C)) == (A && B) || (A && C) =======
+def DistributionLaw1(p, q, r):
+    a = Mand(p, Mor(q, r))
+    b = Mor(Mand(p, q), Mand(p, r))
+    return Meq(a,b)
+
+# ===== Distribution law (A || (B && C)) == (A || B) && (A || C) =======
+def DistributionLaw2(p, q, r):
+    a = Mor(p, Mand(q, r))
+    b = Mand(Mor(p, q), Mor(p, r))
+    return Meq(a,b)
+
 
 # ===== De Morgan !(A || B) == !A && !B =======
 def DeMorgan1(p, q):
-    a = Mnot(Mor(i, j))
-    b = Mand(Mnot(i), Mnot(j))
+    a = Mnot(Mor(p, q))
+    b = Mand(Mnot(p), Mnot(q))
     return Meq(a,b)
 
 #===== De Morgan !(A && B) == (!A || !B) =======
 def DeMorgan2(p, q):
-    a = Mnot(Mand(i, j))
-    b = Mor(Mnot(i), Mnot(j))
+    a = Mnot(Mand(p, q))
+    b = Mor(Mnot(p), Mnot(q))
     return Meq(a,b)
 
+print "===== Distribution law (A && (B || C)) == (A && B) || (A && C) ======="
+for i in Mbool:
+    for j in Mbool:
+        for k in Mbool:
+            print i, j, k, " ---> ", DistributionLaw1(i,j , k)
 
+print "===== Distribution law (A || (B && C)) == (A || B) && (A || C) ======="
+for i in Mbool:
+    for j in Mbool:
+        for k in Mbool:
+            print i, j, k, " ---> ", DistributionLaw2(i,j , k)
 
 print "===== De Morgan !(A || B) == !A && !B ======="
 for i in Mbool:
@@ -210,4 +236,18 @@ for i in Mbool: #A
         h = Mand(i, j)
         m = Mimpl(Mnot(j), Mnot(i))
         t = Mimpl(h, m)
+#        t = Meq(h, m)
         print i, j, " : ", h, m, " ---> ", t
+
+print "===== zennken koutei ((A -> B) && A) -> B ======="
+for i in Mbool: #A
+    for j in Mbool: #B
+        t = Zennkenn(i, j)
+        print i, j, "---> ", t
+
+print "===== ganni paradox (A -> (B -> A))======="
+for i in Mbool: #A
+    for j in Mbool: #B
+        t = Mimpl(i, Mimpl(j, i))
+        print i, j, "---> ", t
+        
