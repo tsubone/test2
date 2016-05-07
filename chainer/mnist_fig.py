@@ -22,11 +22,11 @@ mnist.data  /= 255     # 0-1のデータに変換
 # mnist.target : 正解データ（教師データ）
 mnist.target = mnist.target.astype(np.int32)
 
+N = 60000
 
-def draw_digit(data):
+def draw_digit(data,n):
     size = 28
-    plt.figure(figsize=(2.5, 3))
-    
+    plt.subplot(10,10,n)
     X, Y = np.meshgrid(range(size),range(size))
     Z = data.reshape(size,size)   # convert from vector to 28x28 matrix
     Z = Z[::-1,:]             # flip vertical
@@ -36,8 +36,12 @@ def draw_digit(data):
     plt.gray()
     plt.tick_params(labelbottom="off")
     plt.tick_params(labelleft="off")
-    plt.show()
 
-draw_digit(mnist.data[5])
-draw_digit(mnist.data[12345])
-draw_digit(mnist.data[33456])
+plt.figure(figsize=(28, 28))
+
+cnt=1
+for idx in np.random.permutation(N)[:100]:
+    draw_digit(mnist.data[idx],cnt)
+    cnt+=1;
+
+plt.show()
