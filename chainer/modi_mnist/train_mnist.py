@@ -21,6 +21,8 @@ from chainer import serializers
 import data
 import net
 
+import matplotlib.pyplot as plt
+
 parser = argparse.ArgumentParser(description='Chainer example: MNIST')
 parser.add_argument('--initmodel', '-m', default='',
                     help='Initialize the model from given file')
@@ -136,3 +138,35 @@ print('save the model')
 serializers.save_npz('mlp.model', model)
 print('save the optimizer')
 serializers.save_npz('mlp.state', optimizer)
+
+def draw_digit(data,n):
+#    print ("hoge")
+#    print (data)
+    size = 28
+    plt.subplot(10,10,n)
+#    X, Y = np.meshgrid(range(size),range(size))
+    Z = data.reshape(size,size)   # convert from vector to 28x28 matrix
+    Z = Z[::-1,:]             # flip vertical
+#    print ("hoge2")
+#    print (Z);
+    plt.xlim(0,27)
+    plt.ylim(0,27)
+#    plt.pcolor(X, Y, Z)
+    plt.pcolor(Z)
+    plt.gray()
+    plt.tick_params(labelbottom="off")
+    plt.tick_params(labelleft="off")
+
+plt.figure(figsize=(28, 28))
+
+print ("===============\n")
+print (model.predictor.l1.W.data);
+print ("----------------\n")
+print (model.predictor.l1.W);
+
+cnt=1
+for idx in range(100):
+    draw_digit(model.predictor.l1.W.data[idx],cnt)
+    cnt+=1;
+
+plt.show()
