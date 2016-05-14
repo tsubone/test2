@@ -27,15 +27,11 @@ plt.style.use('ggplot')
 
 
 def draw_digit(data,n):
-#    print ("hoge")
-#    print (data)
     size = 28
     plt.subplot(10,10,n)
 #    X, Y = np.meshgrid(range(size),range(size))
     Z = data.reshape(size,size)   # convert from vector to 28x28 matrix
     Z = Z[::-1,:]             # flip vertical
-#    print ("hoge2")
-#    print (Z);
     plt.xlim(0,27)
     plt.ylim(0,27)
 #    plt.pcolor(X, Y, Z)
