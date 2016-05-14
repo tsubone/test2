@@ -56,7 +56,23 @@ print('load MNIST dataset')
 mnist = data.load_mnist_data()
 mnist['data'] = mnist['data'].astype(np.float32)
 mnist['data'] /= 255
+
 mnist['target'] = mnist['target'].astype(np.int32)
+
+
+print("@@@mnist data[0]=", mnist['data'][0], "\n");
+print("@@@mnist target[0]=", mnist['target'][0], "\n");
+
+hoge=np.arange(10.0)
+print ("hoge=", hoge, type(hoge));
+hoge2=np.split(hoge,2)
+print ("hoge=", hoge2, type(hoge2));
+
+koko=np.arange(10.0);
+koko1, koko2=np.split(koko, [2])
+print ("koko=", koko, "--", koko1, "--", koko2);
+
+
 
 N = 60000
 x_train, x_test = np.split(mnist['data'],   [N])
