@@ -61,13 +61,13 @@ print ("hoge=", hoge);
 
 #test_data=chainer.Variable(mnist['data'][0])
 #test_data=chainer.Variable(np.array([mnist['data'][0], mnist['data'][1]]))
-test_data=chainer.Variable(np.array([mnist['data'][1]]))
+test_data=chainer.Variable(np.array([mnist['data'][7]]))
 #test_data=chainer.Variable(mnist['data'])
 print("test_data=", test_data)
 
 #print ("func=", F.relu())
 
 output=model.predictor(test_data)
-print("output=", output.data, mnist['target'][1])
+print("output=", F.softmax(output).data, mnist['target'][7])
 
 
