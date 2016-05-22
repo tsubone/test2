@@ -14,6 +14,8 @@ from chainer import cuda
 from chainer import optimizers
 from chainer import serializers
 
+import chainer.functions as F
+
 import data
 import net
 
@@ -83,7 +85,10 @@ for epoch in six.moves.range(1, n_epoch + 1):
     sum_rec_loss = 0   # reconstruction loss
     for i in six.moves.range(0, N, batchsize):
         x = chainer.Variable(xp.asarray(x_train[perm[i:i + batchsize]]))
-        optimizer.update(model.get_loss_func(), x)
+        t = model (x)
+        model.loss = F.mean_squared_error(x, t);
+        model.rec_loss = model.loss;
+        optimizer.update(F.mean_squared_error, x, t)
         if epoch == 1 and i == 0:
             with open('graph.dot', 'w') as o:
                 g = computational_graph.build_computational_graph(
@@ -103,8 +108,9 @@ for epoch in six.moves.range(1, n_epoch + 1):
     for i in six.moves.range(0, N_test, batchsize):
         x = chainer.Variable(xp.asarray(x_test[i:i + batchsize]),
                              volatile='on')
-        loss_func = model.get_loss_func(k=10, train=False)
-        loss_func(x)
+        t = model (x)
+        model.loss = F.mean_squared_error(x, t);
+        model.rec_loss = model.loss;
         sum_loss += float(model.loss.data) * len(x.data)
         sum_rec_loss += float(model.rec_loss.data) * len(x.data)
         del model.loss
