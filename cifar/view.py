@@ -20,9 +20,11 @@ def unpickle(f):
     fo.close()
     return d
 
+cifar_path="/home/takashi/work/aidata/cifar/cifar-10-batches-py"
+
 # ラベル名をロード
-label_names = unpickle("/home/takashi/work/aidata/cifar/cifar-10-batches-py/batches.meta")["label_names"]
-d = unpickle("/home/takashi/work/aidata/cifar/cifar-10-batches-py/data_batch_1")
+label_names = unpickle(cifar_path + "/batches.meta")["label_names"]
+d = unpickle(cifar_path + "/data_batch_1")
 data = d["data"]
 labels = np.array(d["labels"])
 nsamples = len(data)
