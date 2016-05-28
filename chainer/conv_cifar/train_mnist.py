@@ -54,6 +54,7 @@ print('load MNIST dataset')
 mnist = data.load_mnist_data()
 mnist['data'] = mnist['data'].astype(np.float32)
 mnist['data'] /= 255
+mnist['data'] = mnist['data'].reshape (len(mnist['data']), 1, 28, 28)
 mnist['target'] = mnist['target'].astype(np.int32)
 
 N = 60000
@@ -63,7 +64,7 @@ N_test = y_test.size
 
 # Prepare multi-layer perceptron model, defined in net.py
 if args.net == 'simple':
-    model = L.Classifier(net.MnistMLP(784, n_units, 10))
+    model = L.Classifier(net.MnistMLP(10))
     if args.gpu >= 0:
         cuda.get_device(args.gpu).use()
         model.to_gpu()
