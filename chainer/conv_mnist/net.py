@@ -11,17 +11,17 @@ class MnistMLP(chainer.Chain):
     build your own neural net.
 
     """
-    def __init__(self, n_in, n_units, n_out):
+    def __init__(self, n_out):
         super(MnistMLP, self).__init__(
-            l1=L.Linear(n_in, n_units),
-            l2=L.Linear(n_units, n_units),
-            l3=L.Linear(n_units, n_out),
+            l1=L.Convolution2D(1, 16, 5, pad=2),
+            l2=L.Linear(3136, 1000),
+            l3=L.Linear(1000, n_out),
         )
 
     def __call__(self, x):
-        h1 = F.relu(self.l1(x))
-        h2 = F.relu(self.l2(h1))
-        return self.l3(h2)
+        h1 = F.max_pooling_2d(F.relu(self.l1(x)), 2)
+        h2 = F.dropout(F.relu(self.l2(h1)))
+        return F.relu(self.l3(h2))
 
 
 class MnistMLPParallel(chainer.Chain):
