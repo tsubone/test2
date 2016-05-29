@@ -3,25 +3,31 @@ import chainer.functions as F
 import chainer.links as L
 
 
-class MnistMLP(chainer.Chain):
+class CifarMLP(chainer.Chain):
 
-    """An example of multi-layer perceptron for MNIST dataset.
+    """An example of multi-layer perceptron for CIFAR dataset.
 
     This is a very simple implementation of an MLP. You can modify this code to
     build your own neural net.
 
     """
     def __init__(self, n_out):
-        super(MnistMLP, self).__init__(
-            l1=L.Convolution2D(1, 16, 5, pad=2),
-            l2=L.Linear(3136, 1000),
-            l3=L.Linear(1000, n_out),
+        super(CifarMLP, self).__init__(
+            l1=L.Convolution2D(3, 32, 5, pad=2),
+            l2=L.Convolution2D(32,32, 3, pad=1),
+            l3=L.Linear(2048, 200),
+            l4=L.Linear(200, 100),
+            l5=L.Linear(100, n_out),
         )
 
     def __call__(self, x):
-        h1 = F.max_pooling_2d(F.relu(self.l1(x)), 2)
-        h2 = F.dropout(F.relu(self.l2(h1)))
-        return F.relu(self.l3(h2))
+#        h0 = F.dropout(x);
+        h0 = x;
+        h1 = F.max_pooling_2d(F.relu(self.l1(h0)), 2)
+        h2 = F.max_pooling_2d(F.relu(self.l2(h1)), 2)
+        h3 = F.dropout(F.relu(self.l3(h2)))
+        h4 = F.dropout(F.relu(self.l4(h3)))
+        return F.relu(self.l5(h4))
 
 
 class MnistMLPParallel(chainer.Chain):

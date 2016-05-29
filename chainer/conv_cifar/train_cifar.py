@@ -49,22 +49,56 @@ print('# epoch: {}'.format(args.epoch))
 print('Network type: {}'.format(args.net))
 print('')
 
-# Prepare dataset
-print('load MNIST dataset')
-mnist = data.load_mnist_data()
-mnist['data'] = mnist['data'].astype(np.float32)
-mnist['data'] /= 255
-mnist['data'] = mnist['data'].reshape (len(mnist['data']), 1, 28, 28)
-mnist['target'] = mnist['target'].astype(np.int32)
+def unpickle(f):
+    import cPickle
+    fo = open(f, 'rb')
+    d = cPickle.load(fo)
+    fo.close()
+    return d
 
-N = 60000
-x_train, x_test = np.split(mnist['data'],   [N])
-y_train, y_test = np.split(mnist['target'], [N])
+cifar_path="/home/takashi/work/aidata/cifar/cifar-10-batches-py"
+
+print('load CIFAR-10 dataset')
+label_names = unpickle(cifar_path + "/batches.meta")["label_names"]
+d = unpickle(cifar_path + "/data_batch_1")
+cifar_data = d["data"]
+labels = np.array(d["labels"])
+nsamples = len(cifar_data)
+
+# Prepare dataset
+cifar = {"data":0, "target":0}
+
+#cifar = data.load_mnist_data()
+cifar['data'] = cifar_data.astype(np.float32)
+cifar['data'] /= 255
+cifar['data'] = cifar['data'].reshape (len(cifar['data']), 3, 32, 32)
+cifar['target'] = labels.astype(np.int32)
+
+print ("******")
+print (cifar['target'], len(cifar['target']))
+print ("******")
+
+N = 9000
+x_train, x_test = np.split(cifar['data'],   [N])
+y_train, y_test = np.split(cifar['target'], [N])
 N_test = y_test.size
+
+#print ("=====1")
+#print (y_train, len(y_train))
+#print (y_test, len(y_test))
+#print ("=====2")
+#print (x_train.ndim)
+#print (x_train.shape)
+
+#print ("=====3")
+#print (x_test.ndim)
+#print (x_test.shape)
+#print ("=====4")
+#print (x_test)
 
 # Prepare multi-layer perceptron model, defined in net.py
 if args.net == 'simple':
-    model = L.Classifier(net.MnistMLP(10))
+    model = L.Classifier(net.CifarMLP(10))
     if args.gpu >= 0:
         cuda.get_device(args.gpu).use()
         model.to_gpu()
@@ -134,6 +168,6 @@ for epoch in six.moves.range(1, n_epoch + 1):
 
 # Save the model and the optimizer
 print('save the model')
-serializers.save_npz('mlp.model', model)
+serializers.save_npz('cifar.model', model)
 print('save the optimizer')
-serializers.save_npz('mlp.state', optimizer)
+serializers.save_npz('cifar.state', optimizer)
