@@ -59,26 +59,45 @@ def unpickle(f):
 cifar_path="/home/takashi/work/aidata/cifar/cifar-10-batches-py"
 
 print('load CIFAR-10 dataset')
-label_names = unpickle(cifar_path + "/batches.meta")["label_names"]
-d = unpickle(cifar_path + "/data_batch_1")
-cifar_data = d["data"]
-labels = np.array(d["labels"])
-nsamples = len(cifar_data)
 
 # Prepare dataset
 cifar = {"data":0, "target":0}
+label_names = unpickle(cifar_path + "/batches.meta")["label_names"]
 
-#cifar = data.load_mnist_data()
-cifar['data'] = cifar_data.astype(np.float32)
+d = unpickle(cifar_path + "/data_batch_1")
+cifar['data']   = d["data"];
+cifar['target'] = np.array(d["labels"])
+
+d = unpickle(cifar_path + "/data_batch_2")
+cifar['data']   = np.vstack ((cifar['data'],   d["data"]))
+cifar['target'] = np.hstack ((cifar['target'],   np.array(d["labels"])))
+
+d = unpickle(cifar_path + "/data_batch_3")
+cifar['data']   = np.vstack ((cifar['data'],   d["data"]))
+cifar['target'] = np.hstack ((cifar['target'],   np.array(d["labels"])))
+
+d = unpickle(cifar_path + "/data_batch_4")
+cifar['data']   = np.vstack ((cifar['data'],   d["data"]))
+cifar['target'] = np.hstack ((cifar['target'],   np.array(d["labels"])))
+
+d = unpickle(cifar_path + "/data_batch_5")
+cifar['data']   = np.vstack ((cifar['data'],   d["data"]))
+cifar['target'] = np.hstack ((cifar['target'],   np.array(d["labels"])))
+
+d = unpickle(cifar_path + "/test_batch")
+cifar['data']   = np.vstack ((cifar['data'],   d["data"]))
+cifar['target'] = np.hstack ((cifar['target'],   np.array(d["labels"])))
+
+cifar['data'] = cifar['data'].astype(np.float32)
 cifar['data'] /= 255
 cifar['data'] = cifar['data'].reshape (len(cifar['data']), 3, 32, 32)
-cifar['target'] = labels.astype(np.int32)
+cifar['target'] = cifar['target'].astype(np.int32)
 
 print ("******")
 print (cifar['target'], len(cifar['target']))
 print ("******")
 
-N = 9000
+N = 50000
 x_train, x_test = np.split(cifar['data'],   [N])
 y_train, y_test = np.split(cifar['target'], [N])
 N_test = y_test.size
