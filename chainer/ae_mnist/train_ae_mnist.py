@@ -14,6 +14,8 @@ from chainer import cuda
 from chainer import optimizers
 from chainer import serializers
 
+import chainer.functions as F
+
 import data
 import net
 
@@ -75,7 +77,12 @@ if args.resume:
 
 # Learning loop
 for epoch in six.moves.range(1, n_epoch + 1):
+
+    if (epoch % 20) == 0 and epoch > 1:
+        model.stack +=1
+
     print('epoch', epoch)
+    print('stack', model.stack)        
 
     # training
     perm = np.random.permutation(N)
@@ -83,33 +90,26 @@ for epoch in six.moves.range(1, n_epoch + 1):
     sum_rec_loss = 0   # reconstruction loss
     for i in six.moves.range(0, N, batchsize):
         x = chainer.Variable(xp.asarray(x_train[perm[i:i + batchsize]]))
-        optimizer.update(model.get_loss_func(), x)
-        if epoch == 1 and i == 0:
-            with open('graph.dot', 'w') as o:
-                g = computational_graph.build_computational_graph(
-                    (model.loss, ))
-                o.write(g.dump())
-            print('graph generated')
+        t = model(x);
+        optimizer.update(F.mean_squared_error, x, t)
 
-        sum_loss += float(model.loss.data) * len(x.data)
-        sum_rec_loss += float(model.rec_loss.data) * len(x.data)
+        sum_loss = float(F.mean_squared_error(x, t).data) * len(x.data)
 
-    print('train mean loss={}, mean reconstruction loss={}'
-          .format(sum_loss / N, sum_rec_loss / N))
+    print('train mean loss={}', sum_loss / N)
 
     # evaluation
     sum_loss = 0
     sum_rec_loss = 0
     for i in six.moves.range(0, N_test, batchsize):
         x = chainer.Variable(xp.asarray(x_test[i:i + batchsize]),
-                             volatile='on')
-        loss_func = model.get_loss_func(k=10, train=False)
-        loss_func(x)
-        sum_loss += float(model.loss.data) * len(x.data)
-        sum_rec_loss += float(model.rec_loss.data) * len(x.data)
-        del model.loss
-    print('test  mean loss={}, mean reconstruction loss={}'
-          .format(sum_loss / N_test, sum_rec_loss / N_test))
+                              volatile='on')
+        t = model(x)
+    #     loss_func = model.get_loss_func(k=10, train=False)
+    #     loss_func(x)
+        sum_loss += float(F.mean_squared_error(x, t).data) * len(x.data)
+    #     sum_rec_loss += float(model.rec_loss.data) * len(x.data)
+    #     del model.loss
+    print('test mean loss={}', sum_loss / N)
 
 
 # Save the model and the optimizer
@@ -142,6 +142,6 @@ save_images(x1.data, 'test_reconstructed')
 
 
 # draw images from randomly sampled z
-z = chainer.Variable(np.random.normal(0, 1, (9, n_latent)).astype(np.float32))
-x = model.decode(z)
-save_images(x.data, 'sampled')
+#z = chainer.Variable(np.random.normal(0, 1, (9, n_latent)).astype(np.float32))
+#x = model.decode(z)
+#save_images(x.data, 'sampled')
