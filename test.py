@@ -9,6 +9,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 import math as m
 
+#plt.style.use('ggplot')
+
 a = np.arange( 15 ).reshape(3,5)
 
 print a;
@@ -25,15 +27,14 @@ b = 1
 #print (type (a))
 #print (type (b))
 
+
+
+# 2D Graph draw
+
 x = np.arange (0.01, 1, 0.01)
-#print x;
 
-
-#print y;
-
-plt.title (r"$-[a\log (x) + (1-a)\log (1-x)]$");
 # r is low string to avoid escape sequence
-#plt.xlabel(r'$\mu_0$')
+plt.title (r"$-[a\log (x) + (1-a)\log (1-x)]$");
 plt.xlabel(r'$x$')
 plt.ylabel (r'$y$');
 
@@ -53,6 +54,9 @@ plt.xlim (0.0,1.0)
 plt.xticks (np.arange(0,1.1,0.1))
 plt.legend(loc='upper top') # 凡例を右上に表示
 plt.show();
+
+
+# 3D Graph draw
 
 x = np.arange(0.01, 1, 0.01)
 y = np.arange(0.01, 1, 0.01)
