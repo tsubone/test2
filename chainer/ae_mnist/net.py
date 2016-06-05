@@ -8,20 +8,20 @@ import chainer.links as L
 
 class VAE(chainer.Chain):
     """Variational AutoEncoder"""
-    def __init__(self, n_in, n_latent, n_h):
+    def __init__(self,):
         super(VAE, self).__init__(
             # encoder
-            le1=L.Linear(n_in, n_h),
-            le2=L.Linear(n_h, n_latent),
-            le3=L.Linear(n_latent, 128),
-            le4=L.Linear(128, 64),
+            le1=L.Convolution2D(1, 16, 5, pad=2),
+            le2=L.Linear(3136, 1024),
+            le3=L.Linear(1024, 256),
+            le4=L.Linear(256, 64),
             le5=L.Linear(64, 32),
             # decoder
             ld5=L.Linear(32, 64),
-            ld4=L.Linear(64, 128),
-            ld3=L.Linear(128, n_latent),
-            ld2=L.Linear(n_latent, n_h),
-            ld1=L.Linear(n_h, n_in),
+            ld4=L.Linear(64, 256),
+            ld3=L.Linear(256, 1024),
+            ld2=L.Linear(1024, 3136),
+            ld1=L.Linear(3136, 784),
         )
         self.stack=0
 
@@ -30,7 +30,7 @@ class VAE(chainer.Chain):
         return self.decode(self.encode(x), sigmoid)
 
     def encode(self, x):
-        h1 = F.dropout(F.relu(self.le1(x)))
+        h1 = F.max_pooling_2d(F.relu(self.le1(x)) ,2)
         if self.stack<=0:
             return h1
         h2 = F.dropout(F.relu(self.le2(h1)))
@@ -63,6 +63,6 @@ class VAE(chainer.Chain):
             h2 = F.relu(self.ld2(h3))
         else:
             h2 = h3
-        h1 = F.relu(self.ld1(h2))        
-        return h1
+        h1 = F.relu(self.ld1(h2))
+        return chainer.Variable(h1.data.reshape (len(h1.data), 1, 28, 28))
 
