@@ -49,7 +49,8 @@ a = 0.8
 y =  - (a * np.log (x) + (1-a) * np.log (1-x))
 plt.plot (x, y, label="a=0.8")
 
-
+plt.xlim (0.0,1.0)
+plt.xticks (np.arange(0,1.1,0.1))
 plt.legend(loc='upper top') # 凡例を右上に表示
 plt.show();
 
