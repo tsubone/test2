@@ -7,36 +7,15 @@ import matplotlib.pyplot as plt
 
 from mpl_toolkits.mplot3d import Axes3D
 
-import math as m
 
-#plt.style.use('ggplot')
-
-a = np.arange( 15 ).reshape(3,5)
-
-print a;
-print ("============")
-#print a[1:,1:5]
-#print a[1:,1:5:2]
-#print a[1:,:]
-print a[:,::-1]
-#print a[1:]
-
-b = 1
-
-#print (a, a.shape, a.ndim)
-#print (type (a))
-#print (type (b))
-
-
-
-# 2D Graph draw
-
-x = np.arange (0.01, 1, 0.01)
+# 2D Graph draw (Cross Entropy Function of NN)
 
 # r is low string to avoid escape sequence
 plt.title (r"$-[a\log (x) + (1-a)\log (1-x)]$");
 plt.xlabel(r'$x$')
 plt.ylabel (r'$y$');
+
+x = np.arange (0.01, 1, 0.01)
 
 a = 0.1
 y =  - (a * np.log (x) + (1-a) * np.log (1-x))
@@ -70,6 +49,4 @@ ax.set_ylabel("Y")
 ax.plot_wireframe(X,Y,Z) #<---ここでplot
 
 plt.show()
-
-print (dir ())
 
