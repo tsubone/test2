@@ -32,6 +32,8 @@ plt.plot (x, y, label="a=0.8")
 plt.xlim (0.0,1.0)
 plt.xticks (np.arange(0,1.1,0.1))
 plt.legend(loc='upper top') # 凡例を右上に表示
+
+plt.grid (True)
 plt.show();
 
 
